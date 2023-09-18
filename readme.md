@@ -1,6 +1,6 @@
 # OCTP Plugin for LAMMPS
 
-On-the-fly Calculation of Transport Properties of Fluids (OCTP) using the order-n algorithm in Equilibrium Molecular Dynamics. More information on how this plugin works and how this plugin can be used with LAMMPS is thoroughly explained in the work by Jamali et al. J. Chem. Inf. Model. 2019, 59, 4, 1290-1294. 
+On-the-fly Calculation of Transport Properties of Fluids (OCTP) using the order-n algorithm in Equilibrium Molecular Dynamics. More information on how this plugin works and how this plugin can be used with LAMMPS is thoroughly explained in the work by [Jamali et al. J. Chem. Inf. Model. 2019, 59, 4, 1290-1294](https://pubs.acs.org/doi/10.1021/acs.jcim.8b00939). 
 
 This plugin consists of two new compute commands (position and rdf/ext) and one new fix command (ordern) for LAMMPS. For more information on the use of these new commands as well as a LAMMPS input file for the calcualation of transport properties for a water-methanol mixture, the user is referred to the work of Jamali et al. 
 
@@ -29,6 +29,7 @@ cd src/
 make mpi
 ```
 
+More information on how to build LAMMPS from source can be found in the official [LAMMPS documentation](https://docs.lammps.org/Build.html).
 
 ## OCTP Commands
 
@@ -38,6 +39,7 @@ make mpi
 
 - **fix ordern** uses the modified order-n algorithm by Dubbeldam et al. (Mol. Simul., 2009, 35 (12–13), pp 1084–1097) to compute mean-square displacement (MSD) for the self-diffusion coefficient, Maxwell-Stefan diffusion coefficient, shear viscosity, bulk viscosity, and thermal conductivity. Each transport property can be calculated from the slope of the time-MSD plot, where a linear relation between MSD and time is found. As the input to this fix command, the ID of "compute position", "compute pressure", and "compute heat/flux" should be assigned. This fix generates output files containing MSD as a function of time. The definition of reported MSD can be found at pages S14, S17, and S19 of the Supporting Information of the article "OCTP: A Tool for On-the-fly Calculation of Transport Properties of Fluids with the Order-n Algorithm in LAMMPS" (J. Chem. Inf. Model., 2019). It should be noted that the reported MSD must be divided by a factor explicitly mentioned at the top of each output file.
 
+The thermal conductivity computation may produce erroneous results in the case of heat flux when applied to systems with many-body interactions. Read the [Wiki page](https://github.com/yiquintero/octp/wiki/Thermal-Conductivity-Computation) for more information.
 
 ## Citation
 

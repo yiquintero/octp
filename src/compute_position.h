@@ -18,38 +18,37 @@
 ------------------------------------------------------------------------- */
 
 #ifdef COMPUTE_CLASS
-
-ComputeStyle(position,ComputePosition)
-
+   ComputeStyle(position,ComputePosition)
 #else
+  #ifndef LMP_COMPUTE_POSITION_H   
+      
+    #define LMP_COMPUTE_POSITION_H
+    #include "compute.h"
 
-#ifndef LMP_COMPUTE_POSITION_H
-#define LMP_COMPUTE_POSITION_H
-
-#include "compute.h"
-
-namespace LAMMPS_NS {
-
-class ComputePosition : public Compute {
- public:
-  ComputePosition(class LAMMPS *, int, char **);
-  virtual ~ComputePosition();
-  void init();
-  virtual void compute_vector();
+    namespace LAMMPS_NS
+    {
+      class ComputePosition : public Compute 
+      {
+      public:
+        ComputePosition(class LAMMPS *, int, char **);
+        virtual ~ComputePosition();
+        
+        virtual void compute_vector();
+        void init();
  
- protected:
-  int me; // This is for the definition of rank of processor in LAMMPS
-  int nprocs; // This is for the number of processors
-  int *tmprecvcnts; // Number of atoms per each processor
-  int *recvcnts; // Number of atoms per each processor
-  int *displs; // Displacement array for receiving the correct data set from each processor
-  double *sendbuff; // The sending array from all processors
+      protected:
+        int me;           // this is for the definition of rank of processor in LAMMPS
+        int nprocs;       // number of processors
+        int *tmprecvcnts; // number of atoms per processor
+        int *recvcnts;    // number of atoms per processor
+        int *displs;      // displacement array for receiving the correct data set from each processor
+        double *sendbuff; // sending array from all processors
+      };
+    }
 
-};
-}
+  #endif
+#endif
 
-#endif
-#endif
 
 /* ERROR/WARNING messages:
 

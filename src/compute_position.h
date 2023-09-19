@@ -18,7 +18,7 @@
 ------------------------------------------------------------------------- */
 
 #ifdef COMPUTE_CLASS
-   ComputeStyle(position,ComputePosition)
+  ComputeStyle(position,ComputePosition)
 #else
   #ifndef LMP_COMPUTE_POSITION_H   
       

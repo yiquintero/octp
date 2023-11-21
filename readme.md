@@ -1,8 +1,17 @@
 # OCTP Plugin for LAMMPS
 
-On-the-fly Calculation of Transport Properties of Fluids (OCTP) using the order-n algorithm in Equilibrium Molecular Dynamics. More information on how this plugin works and how this plugin can be used with LAMMPS is thoroughly explained in the work by [Jamali et al. J. Chem. Inf. Model. 2019, 59, 4, 1290-1294](https://pubs.acs.org/doi/10.1021/acs.jcim.8b00939). 
+On-the-fly Calculation of Transport Properties of Fluids (OCTP) using the order-n algorithm in Equilibrium Molecular Dynamics. More information on how this plugin works and how this plugin can be used with [LAMMPS](https://www.lammps.org/) is thoroughly explained in the work by [Jamali et al. J. Chem. Inf. Model. 2019, 59, 4, 1290-1294](https://pubs.acs.org/doi/10.1021/acs.jcim.8b00939). 
 
 This plugin consists of two new compute commands (position and rdf/ext) and one new fix command (ordern) for LAMMPS. For more information on the use of these new commands as well as a LAMMPS input file for the calcualation of transport properties for a water-methanol mixture, the user is referred to the work of Jamali et al. 
+
+## Compatibility
+
+| OCTP branch | LAMMPS | Status | 
+|-------------|--------|--------|
+| [master](https://github.com/yiquintero/octp/tree/master) | [stable_23Jun2022_update4](https://github.com/lammps/lammps/releases/tag/stable_23Jun2022_update4) | [![Build and Test](https://github.com/yiquintero/octp/actions/workflows/build-and-test-with-lammps-stable-release.yml/badge.svg?branch=master)](https://github.com/yiquintero/octp/actions/workflows/build-and-test-with-lammps-stable-release.yml)
+| [master](https://github.com/yiquintero/octp/tree/master) | [release branch](https://github.com/lammps/lammps/tree/release) | [![Build and Test](https://github.com/yiquintero/octp/actions/workflows/build-and-test-with-lammps-release-branch.yml/badge.svg?branch=master)](https://github.com/yiquintero/octp/actions/workflows/build-and-test-with-lammps-release-branch.yml)
+| [develop](https://github.com/yiquintero/octp/tree/develop) | [stable_23Jun2022_update4](https://github.com/lammps/lammps/releases/tag/stable_23Jun2022_update4) | [![Build and Test](https://github.com/yiquintero/octp/actions/workflows/build-and-test-with-lammps-stable-release.yml/badge.svg?branch=develop)](https://github.com/yiquintero/octp/actions/workflows/build-and-test-with-lammps-stable-release.yml)
+| [develop](https://github.com/yiquintero/octp/tree/develop) | [release branch](https://github.com/lammps/lammps/tree/release) | [![Build and Test](https://github.com/yiquintero/octp/actions/workflows/build-and-test-with-lammps-release-branch.yml/badge.svg?branch=develop)](https://github.com/yiquintero/octp/actions/workflows/build-and-test-with-lammps-release-branch.yml)
 
 ## Installation
 

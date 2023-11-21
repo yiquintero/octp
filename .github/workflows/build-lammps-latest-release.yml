@@ -17,16 +17,22 @@ jobs:
       with:
         path: octp
 
-    - name: Checkout LAMMPS
+    - name: Checkout LAMMPS latest stable_* tagged release
       uses: actions/checkout@v4
       with:
         repository: lammps/lammps
         ref: stable_23Jun2022_update4
         path: lammps
 
-    - name: Copy OCTP files into LAMMPS
+    - name: Copy OCTP files to LAMMPS src directory
       run: |
         cp --verbose octp/src/* lammps/src/
+
+    - name: Build LAMMPS with OCTP plugin
+      run: |
+        cd lammps/src
+        mpicc --showme:version
+       # make -j 8 mpi
 
     # - uses: actions/checkout@v3
     # - name: configure

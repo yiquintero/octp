@@ -27,10 +27,12 @@ using namespace LAMMPS_NS;
 
 /* ---------------------------------------------------------------------- */
 
-ComputePosition::ComputePosition(LAMMPS *lmp, int narg, char **arg) :
-  Compute(lmp, narg, arg)
+ComputePosition::ComputePosition(LAMMPS *lmp, int narg, char **arg) 
+  : Compute(lmp, narg, arg)
 {
-  if (narg != 3) error->all(FLERR,"Illegal compute position command");
+  if (narg != 3) {
+    error->all(FLERR,"Illegal compute position command");
+  }
 
   vector_flag = 1;
   size_vector = atom->natoms*5;
@@ -66,8 +68,7 @@ ComputePosition::~ComputePosition()
 
 void ComputePosition::init()
 {
-  for (int ii = 0; ii < size_vector; ii++)
-  {
+  for (int ii = 0; ii < size_vector; ii++) {
       vector[ii]=-1.0;
   }
 }
@@ -90,11 +91,9 @@ void ComputePosition::compute_vector()
   int xbox,ybox,zbox;
   double xtmp, ytmp, ztmp;
 
-  if (domain->triclinic == 0) 
-  {
-    for (int i = 0; i < nlocal; i++)
-      if (mask[i] & groupbit) 
-      {  
+  if (domain->triclinic == 0) {
+    for (int i = 0; i < nlocal; i++) {
+      if (mask[i] & groupbit) {  
         xbox = (image[i] & IMGMASK) - IMGMAX;
         ybox = (image[i] >> IMGBITS & IMGMASK) - IMGMAX;
         zbox = (image[i] >> IMG2BITS) - IMGMAX;
@@ -107,10 +106,11 @@ void ComputePosition::compute_vector()
 	      sendbuff[5*i+3] = (double) ((atom->tag[i]) - 1);
 	      sendbuff[5*i+4] = (double) mask[i];
       }
-  } else {
-    for (int i = 0; i < nlocal; i++)
-      if (mask[i] & groupbit) 
-      {
+    }
+  } 
+  else {
+    for (int i = 0; i < nlocal; i++) {
+      if (mask[i] & groupbit) {
         xbox = (image[i] & IMGMASK) - IMGMAX;
         ybox = (image[i] >> IMGBITS & IMGMASK) - IMGMAX;
         zbox = (image[i] >> IMG2BITS) - IMGMAX;
@@ -123,20 +123,24 @@ void ComputePosition::compute_vector()
 	      sendbuff[5*i+3] = (double) ((atom->tag[i]) - 1);
 	      sendbuff[5*i+4] = (double) mask[i];
       }
+    }
   }
+
   // Sending the position of all atoms from all cores (0, 1, ..., n) to all cores
-  for (int ii = 0; ii < nprocs; ii++) 
+  for (int ii = 0; ii < nprocs; ii++) {
     tmprecvcnts[ii] = (ii == me) ?  5*nlocal : 0 ;
+  }
   MPI_Allreduce(tmprecvcnts, recvcnts, nprocs, MPI_INT , MPI_SUM, world);
 
-  for (int ii = 0; ii < nprocs; ii++)
-  {
+  for (int ii = 0; ii < nprocs; ii++) {
     displs[ii] = 0;
   }
-  for (int ii = 1; ii < nprocs; ii++)
-    for (int jj = ii; jj < nprocs ; jj++)
-    {
+
+  for (int ii = 1; ii < nprocs; ii++) {
+    for (int jj = ii; jj < nprocs ; jj++) {
       displs[jj] += recvcnts[ii-1];
     }
+  }
+  
   MPI_Allgatherv(sendbuff,5*nlocal, MPI_DOUBLE, vector, recvcnts, displs, MPI_DOUBLE, world);
 }

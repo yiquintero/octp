@@ -6,9 +6,8 @@ This plugin consists of two new compute commands (position and rdf/ext) and one 
 
 | OCTP branch | LAMMPS | Status | 
 |-------------|--------|--------|
-| master | [ stable_23Jun2022_update4](https://github.com/lammps/lammps/releases/tag/stable_23Jun2022_update4) | ![build and test](https://github.com/yiquintero/octp/actions/workflows/build-and-test-with-lammps-release.yml/badge.svg?branch=master)
-| develop | [ stable_23Jun2022_update4](https://github.com/lammps/lammps/releases/tag/stable_23Jun2022_update4) | ![build and test](https://github.com/yiquintero/octp/actions/workflows/build-and-test-with-lammps-release.yml/badge.svg?branch=develop)
-
+| master | [stable_23Jun2022_update4](https://github.com/lammps/lammps/releases/tag/stable_23Jun2022_update4) | [![Build and Test](https://github.com/yiquintero/octp/actions/workflows/build-and-test-with-lammps-release.yml/badge.svg?branch=master)](https://github.com/yiquintero/octp/actions/workflows/build-and-test-with-lammps-release.yml)
+| develop | [stable_23Jun2022_update4](https://github.com/lammps/lammps/releases/tag/stable_23Jun2022_update4) | [![Build and Test](https://github.com/yiquintero/octp/actions/workflows/build-and-test-with-lammps-release.yml/badge.svg?branch=develop)](https://github.com/yiquintero/octp/actions/workflows/build-and-test-with-lammps-release.yml)
 
 ## Installation
 

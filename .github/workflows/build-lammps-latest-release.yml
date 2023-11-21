@@ -23,10 +23,14 @@ jobs:
         repository: lammps/lammps
         ref: stable_23Jun2022_update4
         path: lammps
-      # run:
-      #   cd lammps
-      #   git checkout 
 
+    - name: Copy OCTP files into LAMMPS
+      run: |
+        echo "pwd" \ 
+          pwd \
+          echo "ls" \
+          ls \
+          cp ocpt/src/* lammps/src/
 
     # - uses: actions/checkout@v3
     # - name: configure

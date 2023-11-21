@@ -1,4 +1,4 @@
-name: build-and-test-with-lammps-release # workflow
+name: build-and-test-with-lammps-stable-release # workflow
 
 # Triggers for the jobs in this workflow
 on:

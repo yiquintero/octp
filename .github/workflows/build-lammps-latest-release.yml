@@ -28,18 +28,13 @@ jobs:
       run: |
         cp --verbose octp/src/* lammps/src/
 
+    - name: Install OpenMPI
+      run: |
+        sudo apt-get install openmpi-bin openmpi-common openmpi-doc libopenmpi-dev
+        echo "mpi version"
+        mpicc --showme:version
+
     - name: Build LAMMPS with OCTP plugin
       run: |
-        cd lammps/src
-        mpicc --showme:version
-       # make -j 8 mpi
-
-    # - uses: actions/checkout@v3
-    # - name: configure
-    #   run: ./configure
-    # - name: make
-    #   run: make
-    # - name: make check
-    #   run: make check
-    # - name: make distcheck
-    #   run: make distcheck
+        cd lammps/src        
+        make -j 8 mpi

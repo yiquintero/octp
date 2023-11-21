@@ -36,5 +36,19 @@ jobs:
 
     - name: Build LAMMPS with OCTP plugin
       run: |
-        cd lammps/src        
+        cd lammps/src
+        make yes-asphere
+        make yes-body
+        make yes-class2
+        make yes-dipole
+        make yes-granular
+        make yes-kspace
+        make yes-manybody
+        make yes-molecule
+        make yes-rigid
+        make yes-shock
         make -j 8 mpi
+        if ! [ -f lmp_mpi ]; then
+          echo "::error:: lammps binary does not exist"
+          exit 1
+        fi

@@ -12,16 +12,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
+    - name: Checkout OCTP
       uses: actions/checkout@v4
       with:
         path: octp
 
-    - name: Checkout tools repo
+    - name: Checkout LAMMPS
       uses: actions/checkout@v4
       with:
         repository: lammps/lammps
+        ref: stable_23Jun2022_update4
         path: lammps
+      # run:
+      #   cd lammps
+      #   git checkout 
 
 
     # - uses: actions/checkout@v3

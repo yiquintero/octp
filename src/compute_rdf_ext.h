@@ -18,84 +18,85 @@
 ------------------------------------------------------------------------- */
 
 #ifdef COMPUTE_CLASS
-  ComputeStyle(rdf/ext,ComputeRDFExtend)
+ComputeStyle(rdf/ext,ComputeRDFExtend)
 #else
-  #ifndef LMP_COMPUTE_RDF__Extend_H
-    
-    #define LMP_COMPUTE_RDF__Extend_H
-    #include "compute.h"
+#ifndef LMP_COMPUTE_RDF__Extend_H
+#define LMP_COMPUTE_RDF__Extend_H
 
-    namespace LAMMPS_NS 
-    {
-      class ComputeRDFExtend : public Compute 
-      {
-      public:
-        ComputeRDFExtend(class LAMMPS *, int, char **);
-        virtual ~ComputeRDFExtend();
-      
-        virtual double compute_scalar();  // remember what this returns
-        void init();
+#include "compute.h"
 
-      protected:
-        #define MAXGROUPS 32
-        #define SQR(x) ((x)*(x))
-        #define CUBE(x) ((x)*(x)*(x))
-      
-        // parameters related to MPI and gathering the positions
-        int me;           // This is for the definition of rank of processor in LAMMPS
-        int nprocs;       // number of processors
-        int *tmprecvcnts; // number of atoms per each processor [array]
-        int *recvcnts;    // number of atoms per each processor [array]
-        int *displs;      // displacement array for receiving the correct data set from each processor [array]
-        double *sendbuff;
-        double *recvbuff;
-
-        // New static arrays or dynamic arrays
-        double **TmpPos;
-        int **Groups;
-
-        // RDF
-        int binsize;
-        double r, r2, sf, pairs;
-        double rin , rout, vin, vout;
-        int whichbin;
-        double NumberOfParticles;
-        double ***Gg;
-        double ***Gglocal;
-        double boxsize;
-        double maxdist;
-        double hBox;
-        double Delta;
-        double Delta_1;
-        double Cube_deltaboxsize;
-        double Sqr_deltaboxsize;
-        double Ggt;
-        double dr[3]; 
+namespace LAMMPS_NS 
+{
+  class ComputeRDFExtend : public Compute 
+  {
+  public:
+    ComputeRDFExtend(class LAMMPS *, int, char **);
+    virtual ~ComputeRDFExtend();
   
-        // RDF Correction
-        double ***PartSum;
-        double SphereVolFrac;
-        double gr_correction;
+    virtual double compute_scalar();  // remember what this returns
+    void init();
+
+  protected:
+    #define MAXGROUPS 32
+    #define SQR(x) ((x)*(x))
+    #define CUBE(x) ((x)*(x)*(x))
   
-        // The things in common with the other one
-        double timeinterval;
-        int count ;
-        int WriteFileEvery;
-        FILE *FilePtr;		// file handle for writing the calculated RDF 
-        int samplerate;
-        int realatom;
-        char *filename;  // filename
-  
-        // Finding corresponding groups to each atom
-        int tmpgroup[MAXGROUPS][3];  // group_id ; groupbits ; number_of_particles
-        int tmpnumgroup ;
-        int tmpfoundgroup ;
-        int groupatom1, groupatom2; 
-      };
-    }
- 
-  #endif
+    // parameters related to MPI and gathering the positions
+    int me;           // This is for the definition of rank of processor in LAMMPS
+    int nprocs;       // number of processors
+    int *tmprecvcnts; // number of atoms per each processor [array]
+    int *recvcnts;    // number of atoms per each processor [array]
+    int *displs;      // displacement array for receiving the correct data set from each processor [array]
+    double *sendbuff;
+    double *recvbuff;
+
+    // New static arrays or dynamic arrays
+    double **TmpPos;
+    int **Groups;
+
+    // RDF
+    int binsize;
+    double r, r2, sf, pairs;
+    double rin , rout, vin, vout;
+    int whichbin;
+    double NumberOfParticles;
+    double ***Gg;
+    double ***Gglocal;
+    double boxsize;
+    double maxdist;
+    double hBox;
+    double Delta;
+    double Delta_1;
+    double Cube_deltaboxsize;
+    double Sqr_deltaboxsize;
+    double Ggt;
+    double dr[3]; 
+
+    // RDF Correction
+    double ***PartSum;
+    double SphereVolFrac;
+    double gr_correction;
+
+    // The things in common with the other one
+    double timeinterval;
+    int count ;
+    int WriteFileEvery;
+    FILE *FilePtr;		// file handle for writing the calculated RDF 
+    int samplerate;
+    int realatom;
+    char *filename;  // filename
+
+    // Finding corresponding groups to each atom
+    int tmpgroup[MAXGROUPS][3];  // group_id ; groupbits ; number_of_particles
+    int tmpnumgroup ;
+    int tmpfoundgroup ;
+    int groupatom1, groupatom2; 
+  };
+}
+
 #endif
+#endif
+
 
 /* ERROR/WARNING messages:
 

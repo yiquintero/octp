@@ -18,132 +18,129 @@
 ------------------------------------------------------------------------- */
 
 #ifdef FIX_CLASS
-
 FixStyle(ordern,FixOrderN)
-
 #else
-
 #ifndef LMP_FIX_ORDERN_H
 #define LMP_FIX_ORDERN_H
 
 #include "fix.h"
-
 #include <cstdio>
 
-namespace LAMMPS_NS {
+namespace LAMMPS_NS
+{
+  class FixOrderN : public Fix 
+  {
+  public:
+    FixOrderN(class LAMMPS *, int, char **);  // constructor
+    ~FixOrderN(); // destructor
+    
+    int setmask();  // the code is needed at the end of step
+    void init();  // initialization
+    void setup(int);
+    void end_of_step();
+    void invoke_scalar(bigint);
 
-class FixOrderN : public Fix {
- public:
-  FixOrderN(class LAMMPS *, int, char **);  // constructor
-  ~FixOrderN(); // destructor
-  int setmask();  // the code is needed at the end of step
-  void init();  // initialization
-  void setup(int);
-  void end_of_step();
-  void invoke_scalar(bigint);
+    void write_restart(FILE *);
+    void restart(char *);
 
-  void write_restart(FILE *);
-  void restart(char *);
+  private:
 
- private:
+    int me;                // the ID of the local processor
+    int mode;              // which type of transport properties (defined as enum)
+    int nvalues;           // the number of input values (it must be 1)
+    int nfreq;             // the frequency of writing files to disk
+    int icompute;          // the ID of compute for the tranpsort property
+    int nrows;             // number of data passed to fix ordern via compute
+    int startstep;         // the first timestep that it starts sampling
+    int tnb;               // total number of blocks (different time scales)
+    int tnbe;              // total number of block elements (elemets of similar timescales)
+    int vecsize;           // number of vector elements constructed from nrows (exp. diff)
+    int sampsize;          // number of vector elements for constructing sample arrays
+    int flag_Dxyz;         // if components of diffusivities in x, y, & z should be written
+    int flag_TCconv;       // if convective components of thermal conductivity should be written
+    int restart_continue;  // checks to not sample twice in a timestep due to restarting
 
-  int me;   // the ID of the local processor
-  int mode; // which type of transport properties (defined as enum)
-  int nvalues;  // the number of input values (it must be 1)
-  int nfreq;   // the frequency of writing files to disk
-  int icompute; // the ID of compute for the tranpsort property
-  int nrows;  // number of data passed to fix ordern via compute
-  int startstep;  // the first timestep that it starts sampling
-  int tnb;   // total number of blocks (different time scales)
-  int tnbe;  // total number of block elements (elemets of similar timescales)
-  int vecsize;  // number of vector elements constructed from nrows (exp. diff)
-  int sampsize; // number of vector elements for constructing sample arrays
-  int flag_Dxyz; // if components of diffusivities in x, y, & z should be written
-  int flag_TCconv; // if convective components of thermal conductivity should be written
-  int restart_continue; // checks to not sample twice in a timestep due to restarting
+    bigint nvalid;         // the next(current) timestep to call end_of_step()
+    bigint nvalid_last;    // the previous timestep that end_of_step() was called
 
-  bigint nvalid;        // the next(current) timestep to call end_of_step()
-  bigint nvalid_last;   // the previous timestep that end_of_step() was called
+    double deltat;         // timeinterval (nevery*dt)
+    double time;           // correlation time (only for writting data)
+    double boltz;          // Boltzmann constant
+    double nktv2p;         // conversion factors
+    double volume;         // volume of the simulation box
+    double coef;           // conversion coefficient
 
-  double deltat;    // timeinterval (nevery*dt)
-  double time;    // correlation time (only for writting data)
-  double boltz;   // Boltzmann constant
-  double nktv2p;  // conversion factors
-  double volume;  // volume of the simulation box
-	double coef; // conversion coefficient
+    long filepos1;         // the location of header lines for file 1
+    long filepos2;         // the location of header lines for file 2
 
+    double *recdata;       // data passed from compute to fix;
 
-  long filepos1; // the location of header lines for file 1
-  long filepos2; // the location of header lines for file 2
+    char *filename1;       // filename for self-diffusion, shear viscosity, and conductivity
+    char *filename2;       // filename for onsager coefficients and bulk viscosity
 
-  double *recdata; // data passed from compute to fix;
+    char *format;          // the default format of writing data to files (%g)
+    char *format_user;     // user-defined format of writing data to files
+    char *title;           // optional text for the first line of the text
+    char *idcompute;       // the ID of compute 
 
-  char *filename1;  // filename for self-diffusion, shear viscosity, and conductivity
-  char *filename2;  // filename for onsager coefficients and bulk viscosity
+    FILE *fp1;             // output file 1 (self-diffusion, shear viscosity, thermal conductivity)
+    FILE *fp2;             // output file 2 (onsager coefficients, bulk viscosity)
 
-  char *format; // the default format of writing data to files (%g)
-  char *format_user;  // user-defined format of writing data to files
-  char *title; // optional text for the first line of the text
-  char *idcompute;   // the ID of compute 
+    // General variables
+    int count;		         // how many cycles have been passed
+    int icount;            // how many nevery, used for integration
+    
+    // ORDER-N ALGORITHM variables
+    double **nsamp;	      // total number of samples
+    double ***oldint;      // The lowest bound of the integral
+    double *rint;          // running integral
+    int *nbe;              // (BlockLength) number of active elements of blocks
+    int cnb;               // (NumberOfBlock) current active number of blocks
+    int cnbe;              // (CurrentBlockLength) current active number of elemets of the block 
 
-  FILE *fp1;  // output file 1 (self-diffusion, shear viscosity, thermal conductivity)
-  FILE *fp2;  // output file 2 (onsager coefficients, bulk viscosity)
+    // DIFFUSIVITY vairables
+    double ***PosC_ii;
+    double ***PosC_iix;
+    double ***PosC_iiy;
+    double ***PosC_iiz;
+    double ****PosC_ij;
+    double ****PosC_ijx;
+    double ****PosC_ijy;
+    double ****PosC_ijz;
+    double ****PosCorrSum;
+    int **groupinfo;
+    int **atomingroup;
+    int atomgroup;         // the ID of each group
+    int tngroup;           // total # of defined groups (tngroup >= ngroup)
+    int ngroup;            // total # of groups
+    int tnatom;            // total # of atoms in system
+    int natom;             // total # of atoms in groups
+    int sortID;            // A virtual ID of the atom in a for loop (to tnatom)
+    int ID;                // the real ID of an atom on all cores (to tnatom)
+    int atomID;            // the ID of an atom inside a group (to natom)
+    int atommask;          // the group mask of an atom 
 
+    // VISCOSITY/THERMCOND vairables
+    double ***samp;           // samples of MSDs
+    double *data;             // accumulated integrals
+    double sumP, numP, avgP;  // hydrostatic pressure (sum/num = avg)
+    double *simpf0, *simpf1;  // Simpson's rule of integration
+    double dist;              // (integral) The integral we need to sample, i.e., "accint-oldint"  
 
-  // General variables
-  int count;			// how many cycles have been passed
-  int icount;     // how many nevery, used for integration
-  // ORDER-N ALGORITHM variables
-  double **nsamp;	// total number of samples
-  double ***oldint;	// The lowest bound of the integral
-  double *rint;   // running integral
-  int *nbe;	// (BlockLength) number of active elements of blocks
-  int cnb;  // (NumberOfBlock) current active number of blocks
-  int cnbe;	//  (CurrentBlockLength) current active number of elemets of the block 
+    // PRIVATE METHODS
+    bigint nextvalid();
+    void integrate();
+    void write_diffusivity();
+    void write_viscosity();
+    void write_thermcond();
 
-
-  // DIFFUSIVITY vairables
-  double ***PosC_ii;
-  double ***PosC_iix;
-  double ***PosC_iiy;
-  double ***PosC_iiz;
-  double ****PosC_ij;
-  double ****PosC_ijx;
-  double ****PosC_ijy;
-  double ****PosC_ijz;
-  double ****PosCorrSum;
-  int **groupinfo;
-  int **atomingroup;
-  int atomgroup;  // the ID of each group
-  int tngroup;  // total # of defined groups (tngroup >= ngroup)
-  int ngroup;  // total # of groups
-  int tnatom;  // total # of atoms in system
-  int natom;    // total # of atoms in groups
-  int sortID;   // A virtual ID of the atom in a for loop (to tnatom)
-  int ID;   // the real ID of an atom on all cores (to tnatom)
-  int atomID; // the ID of an atom inside a group (to natom)
-  int atommask; // the group mask of an atom 
-
-  // VISCOSITY/THERMCOND vairables
-  double ***samp;		// samples of MSDs
-  double *data;  // accumulated integrals
-  double sumP, numP, avgP;   // hydrostatic pressure (sum/num = avg)
-  double *simpf0, *simpf1; // Simpson's rule of integration
-  double dist;			// (integral) The integral we need to sample, i.e., "accint-oldint"  
-  
-  // PRIVATE METHODS
-  bigint nextvalid();
-  void integrate();
-  void write_diffusivity();
-  void write_viscosity();
-  void write_thermcond();
-
-};
+   };
 
 }
 
 #endif
 #endif
+
 
 /* ERROR/WARNING messages:
 

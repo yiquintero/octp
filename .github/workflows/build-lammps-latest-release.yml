@@ -26,11 +26,7 @@ jobs:
 
     - name: Copy OCTP files into LAMMPS
       run: |
-        echo "pwd" \ 
-          pwd \
-          echo "ls" \
-          ls \
-          cp ocpt/src/* lammps/src/
+        cp --verbose octp/src/* lammps/src/
 
     # - uses: actions/checkout@v3
     # - name: configure

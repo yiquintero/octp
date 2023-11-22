@@ -24,6 +24,22 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
+# Get LAMMPS
+if (TEST_IN_GITHUB_ACTIONS)
+  # lammps was previously downloaded and built as part of the workflow
+  set (LAMMPS_SOURCE_DIR "${CMAKE_SOURCE_DIR}/../../lammps/src/")
+else()
+  message(STATUS "Downloading LAMMPS")
+  # download lammps
+  FetchContent_Declare(
+    lammps
+    URL https://github.com/lammps/lammps/archive/refs/tags/stable_23Jun2022_update4.zip
+  )
+  FetchContent_Populate(lammps)
+  set (LAMMPS_SOURCE_DIR "${lammps_SOURCE_DIR}/src/")
+endif()
+
+
 #Enable testing in CMake
 enable_testing()
 
@@ -32,6 +48,9 @@ add_executable(
     testoctp
     testoctp.cpp
 )
+
+# Add a preprocessor definition with the path to LAMMPS
+add_compile_definitions(LAMMPS_PATH=${LAMMPS_SOURCE_DIR})
 
 # link the googletest library to the tests
 target_link_libraries(
@@ -45,18 +64,7 @@ include(GoogleTest)
 gtest_discover_tests(testoctp)
 
 
-if (TEST_IN_GITHUB_ACTIONS)
-  # lammps was previously downloaded and built as part of the workflow
-  set (LAMMPS_SOURCE_DIR "${CMAKE_SOURCE_DIR}/../../lammps/src/")
-else()
-  message(STATUS "Downloading LAMMPS")
-  # download lammps
-  FetchContent_Declare(
-    lammps
-    URL https://github.com/lammps/lammps/archive/refs/tags/stable_23Jun2022_update4.zip
-  )
-  FetchContent_Populate(lammps)
-  set (LAMMPS_SOURCE_DIR "${lammps_SOURCE_DIR}/src/")
+if (NOT TEST_IN_GITHUB_ACTIONS)
   # copy octp files to lammps dir
   file(GLOB filesToCopy "${CMAKE_SOURCE_DIR}/../src/*")
   file(COPY ${filesToCopy} DESTINATION ${LAMMPS_SOURCE_DIR})

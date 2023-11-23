@@ -5,8 +5,8 @@ cmake_policy(SET CMP0135 NEW)
 
 project(octptests)
 
-# TRUE if tests are run as part of GitHub Actions workflow, FALSE otherwise
-set (TEST_IN_GITHUB_ACTIONS FALSE)
+# TEST_IN_GITHUB_ACTIONS is ON if tests are run as part of GitHub Actions workflow, it's OFF otherwise
+set (TEST_IN_GITHUB_ACTIONS OFF CACHE INTERNAL "Tests are built and run as part of a GitHub actions workflow")
 
 # GoogleTest requires at least C++14
 set(CMAKE_CXX_STANDARD 14)

@@ -64,14 +64,18 @@ public:
 
 };
 
+TEST_F(OctpTest, DummyTest0) {
+    //std::cout << "dumdum0 " + lammpspath << std::endl << testdatapath << std::endl;
+    EXPECT_TRUE(true);
+}
 
-TEST_F(OctpTest, DummyTest) {
-    std::cout << "dumdum1 " + lammpspath << std::endl << testdatapath << std::endl;
+TEST_F(OctpTest, DummyTest1) {
+    //std::cout << "dumdum1 " + lammpspath << std::endl << testdatapath << std::endl;
     EXPECT_TRUE(true);
 }
 
 TEST_F(OctpTest, DummyTest2) {
-    std::cout << "dumdum2 " + lammpspath << std::endl << testdatapath << std::endl;
+    //std::cout << "dumdum2 " + lammpspath << std::endl << testdatapath << std::endl;
     EXPECT_TRUE(true);
 }
 

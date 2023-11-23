@@ -81,7 +81,8 @@ else()
     )
 endif()
 
-# Add a preprocessor definition with the path to LAMMPS
+# Add preprocessor definitions used in the tests
+add_compile_definitions(TEST_DATA_PATH="${CMAKE_SOURCE_DIR}/data/")
 add_compile_definitions(LAMMPS_PATH=${LAMMPS_SOURCE_DIR})
 
 

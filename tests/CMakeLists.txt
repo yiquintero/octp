@@ -24,6 +24,26 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
+#Enable testing in CMake
+enable_testing()
+
+# Create an executable for the tests
+add_executable(
+    testoctp
+    testoctp.cpp
+)
+
+# link the googletest library to the tests
+target_link_libraries(
+    testoctp
+    GTest::gtest_main
+)
+
+# Enable CMake’s test runner to discover the tests included in the binary,
+# using the GoogleTest CMake module.
+include(GoogleTest)
+gtest_discover_tests(testoctp)
+
 # Get LAMMPS
 if (TEST_IN_GITHUB_ACTIONS)
   # lammps was previously downloaded and built as part of the workflow
@@ -37,55 +57,32 @@ else()
   )
   FetchContent_Populate(lammps)
   set (LAMMPS_SOURCE_DIR "${lammps_SOURCE_DIR}/src/")
+    # copy octp files to lammps dir
+    file(GLOB filesToCopy "${CMAKE_SOURCE_DIR}/../src/*")
+    file(COPY ${filesToCopy} DESTINATION ${LAMMPS_SOURCE_DIR})
+    # build lammps+octp as a post-build event of the testoctp
+    add_custom_command(
+      TARGET testoctp POST_BUILD 
+      COMMAND cd ${LAMMPS_SOURCE_DIR} &&
+        make yes-asphere &&
+        make yes-body &&
+        make yes-class2 &&
+        make yes-dipole &&
+        make yes-granular &&
+        make yes-kspace &&
+        make yes-manybody &&
+        make yes-molecule &&
+        make yes-rigid &&
+        make yes-shock &&
+        make -j 8 mpi
+      WORKING_DIRECTORY ${lammps_SOURCE_DIR}
+      VERBATIM
+      COMMENT "Build LAMMPS with OCTP plugin"
+    )
 endif()
-
-
-#Enable testing in CMake
-enable_testing()
-
-# Create an executable for the tests
-add_executable(
-    testoctp
-    testoctp.cpp
-)
 
 # Add a preprocessor definition with the path to LAMMPS
 add_compile_definitions(LAMMPS_PATH=${LAMMPS_SOURCE_DIR})
 
-# link the googletest library to the tests
-target_link_libraries(
-    testoctp
-    GTest::gtest_main
-)
 
-# Enable CMake’s test runner to discover the tests included in the binary,
-# using the GoogleTest CMake module.
-include(GoogleTest)
-gtest_discover_tests(testoctp)
-
-
-if (NOT TEST_IN_GITHUB_ACTIONS)
-  # copy octp files to lammps dir
-  file(GLOB filesToCopy "${CMAKE_SOURCE_DIR}/../src/*")
-  file(COPY ${filesToCopy} DESTINATION ${LAMMPS_SOURCE_DIR})
-  # build lammps+octp as a post-build event of the testoctp
-  add_custom_command(
-    TARGET testoctp POST_BUILD 
-    COMMAND cd ${LAMMPS_SOURCE_DIR} &&
-      make yes-asphere &&
-      make yes-body &&
-      make yes-class2 &&
-      make yes-dipole &&
-      make yes-granular &&
-      make yes-kspace &&
-      make yes-manybody &&
-      make yes-molecule &&
-      make yes-rigid &&
-      make yes-shock &&
-      make -j 8 mpi
-    WORKING_DIRECTORY ${lammps_SOURCE_DIR}
-    VERBATIM
-    COMMENT "Build LAMMPS with OCTP plugin"
-  )
-endif()
 

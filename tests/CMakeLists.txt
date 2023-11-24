@@ -53,7 +53,7 @@ else()
   # download lammps
   FetchContent_Declare(
     lammps
-    URL https://github.com/lammps/lammps/archive/refs/tags/stable_23Jun2022_update4.zip
+    URL https://github.com/lammps/lammps/archive/refs/tags/stable_2Aug2023_update1.zip
   )
   FetchContent_Populate(lammps)
   set (LAMMPS_SOURCE_DIR "${lammps_SOURCE_DIR}/src/")

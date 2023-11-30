@@ -54,3 +54,12 @@ jobs:
           echo "::error:: lammps binary does not exist"
           exit 1
         fi
+    
+    - name: Run Tests
+      run: |
+        cd octp/tests/
+        mkdir build
+        cd build
+        cmake .. -DTEST_IN_GITHUB_ACTIONS=ON
+        make
+        ./testoctp

@@ -2,6 +2,9 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
+# Testing data
+tests/data/
+
 # visual studio code settings
 .vs*/
 
